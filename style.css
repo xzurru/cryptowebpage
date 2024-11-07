@@ -1,0 +1,139 @@
+/* Grundlegende Layout-Einstellungen */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 1.5em 0;
+  text-align: center;
+  font-size: 2rem;
+  border-bottom: 3px solid #34495e;
+}
+
+h1 {
+  margin: 0;
+}
+
+/* Steuerungsbereich */
+.controls {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 2em 0;
+  padding: 2em;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.control-item {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+select, input, button {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+select, input {
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Anzeige der Krypto-Preise */
+.crypto-prices {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 2em;
+}
+
+.crypto-box {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 220px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.crypto-box:hover {
+  transform: translateY(-5px);
+  background-color: #ecf0f1;
+}
+
+.crypto-box h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.crypto-box p {
+  font-size: 1rem;
+  color: #7f8c8d;
+}
+
+/* Chart-Container */
+.chart-container {
+  margin: 2em auto;
+  width: 80%;
+  max-width: 900px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Ergebnisbereich */
+.result {
+  font-size: 1.2rem;
+  color: #2ecc71;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 4em;
+  padding: 1em;
+  background-color: #2c3e50;
+  color: white;
+  font-size: 1rem;
+}
