@@ -1,15 +1,45 @@
 const apiUrl = 'https://api.coingecko.com/api/v3/simple/price';
 const historyApiUrl = 'https://api.coingecko.com/api/v3/coins/';
-
-// Erweitertes Coin-Array
 const coins = [
   'bitcoin', 'ethereum', 'litecoin', 'solana', 'binancecoin', 
   'cardano', 'dogecoin', 'polkadot', 'ripple', 'chainlink'
 ];
 
 let priceChart;
+let language = 'en';
 
-// Funktion zum Abrufen und Anzeigen der Krypto-Preise
+const texts = {
+  en: {
+    headerTitle: "Crypto Dashboard",
+    languageLabel: "Language:",
+    currencyLabel: "Currency:",
+    calcResult: "Result: ",
+    tradeResult: "Profit: "
+  },
+  de: {
+    headerTitle: "Krypto Dashboard",
+    languageLabel: "Sprache:",
+    currencyLabel: "Währung:",
+    calcResult: "Ergebnis: ",
+    tradeResult: "Gewinn: "
+  }
+};
+
+function changeLanguage() {
+  language = document.getElementById('languageSelect').value;
+  updateTexts();
+  getCryptoPrices();
+}
+
+function updateTexts() {
+  const selectedTexts = texts[language];
+  document.getElementById('headerTitle').textContent = selectedTexts.headerTitle;
+  document.getElementById('languageLabel').textContent = selectedTexts.languageLabel;
+  document.getElementById('currencyLabel').textContent = selectedTexts.currencyLabel;
+  document.getElementById('calcResult').textContent = selectedTexts.calcResult;
+  document.getElementById('tradeResult').textContent = selectedTexts.tradeResult;
+}
+
 async function getCryptoPrices() {
   const currency = document.getElementById('currencySelect').value;
 
@@ -18,29 +48,28 @@ async function getCryptoPrices() {
     const data = await response.json();
 
     const cryptoContainer = document.getElementById('crypto-prices');
-    cryptoContainer.innerHTML = ''; // Clear previous data
+    cryptoContainer.innerHTML = '';
 
     for (const coin of coins) {
       const coinData = data[coin];
       if (coinData) {
         const price = coinData[currency];
-        const change24h = coinData[`${currency}_24h_change`]?.toFixed(2) || "Keine Daten";
+        const change24h = coinData[`${currency}_24h_change`]?.toFixed(2) || "No data";
 
         cryptoContainer.innerHTML += `
           <div class="crypto-box" onclick="displayChart('${coin}')">
             <h3>${coin.charAt(0).toUpperCase() + coin.slice(1)}</h3>
-            <p>Preis: ${currency.toUpperCase()} ${price}</p>
-            <p>24h Änderung: ${change24h}%</p>
+            <p>${currency.toUpperCase()} ${price}</p>
+            <p>24h Change: ${change24h}%</p>
           </div>
         `;
       }
     }
   } catch (error) {
-    console.error("Fehler beim Abrufen der Daten:", error);
+    console.error("Error fetching data:", error);
   }
 }
 
-// Funktion zur Anzeige des Diagramms für eine Kryptowährung
 async function displayChart(coin) {
   const currency = document.getElementById('currencySelect').value;
 
@@ -50,6 +79,12 @@ async function displayChart(coin) {
 
     const labels = data.prices.map(price => new Date(price[0]).toLocaleDateString());
     const prices = data.prices.map(price => price[1]);
+
+    const highestPrice = Math.max(...prices).toFixed(2);
+    const lowestPrice = Math.min(...prices).toFixed(2);
+
+    document.getElementById('highestPrice').textContent = `Highest Price (7 days): ${currency.toUpperCase()} ${highestPrice}`;
+    document.getElementById('lowestPrice').textContent = `Lowest Price (7 days): ${currency.toUpperCase()} ${lowestPrice}`;
 
     if (priceChart) {
       priceChart.destroy();
@@ -61,7 +96,7 @@ async function displayChart(coin) {
       data: {
         labels: labels,
         datasets: [{
-          label: `${coin.charAt(0).toUpperCase() + coin.slice(1)} Preis (letzte 7 Tage)`,
+          label: `${coin.charAt(0).toUpperCase() + coin.slice(1)} Price (last 7 days)`,
           data: prices,
           borderColor: 'rgba(75, 192, 192, 1)',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -71,51 +106,52 @@ async function displayChart(coin) {
       options: {
         responsive: true,
         scales: {
-          x: { display: true, title: { display: true, text: 'Datum' } },
-          y: { display: true, title: { display: true, text: `Preis in ${currency.toUpperCase()}` } }
+          x: { display: true, title: { display: true, text: 'Date' } },
+          y: { display: true, title: { display: true, text: `Price in ${currency.toUpperCase()}` } }
         }
       }
     });
   } catch (error) {
-    console.error(`Fehler beim Abrufen der historischen Daten für ${coin}:`, error);
+    console.error(`Error fetching historical data for ${coin}:`, error);
   }
 }
 
-// Währungsrechner-Funktion bleibt unverändert.
 async function calculateCrypto() {
-  const crypto = document.getElementById('cryptoSelect').value;
-  const amount = document.getElementById('amount').value;
   const currency = document.getElementById('currencySelect').value;
+  const crypto = document.getElementById('cryptoSelect').value;
+  const amount = parseFloat(document.getElementById('amount').value);
+
+  if (!amount || amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
 
   try {
     const response = await fetch(`${apiUrl}?ids=${crypto}&vs_currencies=${currency}`);
     const data = await response.json();
     const price = data[crypto][currency];
+    const result = (price * amount).toFixed(2);
 
-    const result = amount * price;
-    document.getElementById('result').textContent = `Ergebnis: ${result.toFixed(2)} ${currency.toUpperCase()}`;
+    document.getElementById('calcResult').textContent = `Result: ${currency.toUpperCase()} ${result}`;
   } catch (error) {
-    console.error("Fehler bei der Berechnung:", error);
-    document.getElementById('result').textContent = "Fehler bei der Berechnung.";
+    console.error("Error calculating crypto:", error);
   }
 }
 
-// Gewinnrechner-Funktionen für Long- und Short-Trades bleiben unverändert
-function calculateLongTrade() {
+function calculateTradeProfit() {
   const entryPrice = parseFloat(document.getElementById('entryPrice').value);
   const exitPrice = parseFloat(document.getElementById('exitPrice').value);
-  const positionSize = parseFloat(document.getElementById('positionSize').value);
-  const profit = (exitPrice - entryPrice) * positionSize;
-  document.getElementById('tradeResult').textContent = `Long Trade Gewinn: ${profit.toFixed(2)}`;
-}
+  const amount = parseFloat(document.getElementById('tradeAmount').value);
 
-function calculateShortTrade() {
-  const entryPrice = parseFloat(document.getElementById('entryPrice').value);
-  const exitPrice = parseFloat(document.getElementById('exitPrice').value);
-  const positionSize = parseFloat(document.getElementById('positionSize').value);
-  const profit = (entryPrice - exitPrice) * positionSize;
-  document.getElementById('tradeResult').textContent = `Short Trade Gewinn: ${profit.toFixed(2)}`;
+  if (!entryPrice || !exitPrice || !amount || entryPrice <= 0 || exitPrice <= 0 || amount <= 0) {
+    alert("Please enter valid numbers for all fields.");
+    return;
+  }
+
+  const profit = ((exitPrice - entryPrice) * amount).toFixed(2);
+  document.getElementById('tradeResult').textContent = `Profit: ${profit}`;
 }
 
 getCryptoPrices();
-setInterval(getCryptoPrices, 60000); // Aktualisiert alle 60 Sekunden
+setInterval(getCryptoPrices, 60000);
+updateTexts();
