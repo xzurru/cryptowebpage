@@ -1,62 +1,61 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Crypto Dashboard</h1>
-    </header>
+  <header>
+    <h1 id="headerTitle">Crypto Dashboard</h1>
+    <label id="languageLabel">Language:</label>
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+    </select>
+    <label id="currencyLabel">Currency:</label>
+    <select id="currencySelect" onchange="getCryptoPrices()">
+      <option value="usd">USD</option>
+      <option value="eur">EUR</option>
+    </select>
+  </header>
 
-    <div class="controls">
-        <div class="control-item">
-            <label for="currencySelect">Währung:</label>
-            <select id="currencySelect" onchange="getCryptoPrices()">
-                <option value="usd">USD</option>
-                <option value="eur" selected>EUR</option>
-                <option value="gbp">GBP</option>
-            </select>
-        </div>
+  <div id="crypto-prices"></div>
 
-        <div class="control-item">
-            <label for="cryptoSelect">Kryptowährung:</label>
-            <select id="cryptoSelect">
-                <option value="bitcoin">Bitcoin</option>
-                <option value="ethereum">Ethereum</option>
-                <option value="litecoin">Litecoin</option>
-                <option value="solana">Solana</option>
-                <option value="binancecoin">Binance Coin</option>
-                <option value="cardano">Cardano</option>
-                <option value="dogecoin">Dogecoin</option>
-            </select>
-        </div>
+  <div id="crypto-stats">
+    <h3>Statistics</h3>
+    <p id="highestPrice">Highest Price (7 days): -</p>
+    <p id="lowestPrice">Lowest Price (7 days): -</p>
+  </div>
+  <canvas id="priceChart"></canvas>
 
-        <div class="control-item">
-            <label for="amount">Menge:</label>
-            <input type="number" id="amount" placeholder="Menge" />
-        </div>
+  <div id="crypto-calculator">
+    <h3>Crypto Calculator</h3>
+    <select id="cryptoSelect">
+      <option value="bitcoin">Bitcoin</option>
+      <option value="ethereum">Ethereum</option>
+      <option value="litecoin">Litecoin</option>
+      <!-- add other coins as needed -->
+    </select>
+    <input type="number" id="amount" placeholder="Amount" step="any">
+    <button onclick="calculateCrypto()">Calculate</button>
+    <p id="calcResult">Result: -</p>
+  </div>
 
-        <div class="control-item">
-            <button onclick="calculateCrypto()">Berechnen</button>
-        </div>
+  <div id="trade-calculator">
+    <h3>Trade Profit Calculator</h3>
+    <label>Entry Price:</label>
+    <input type="number" id="entryPrice" placeholder="Entry Price" step="any">
+    <label>Exit Price:</label>
+    <input type="number" id="exitPrice" placeholder="Exit Price" step="any">
+    <label>Amount:</label>
+    <input type="number" id="tradeAmount" placeholder="Amount" step="any">
+    <button onclick="calculateTradeProfit()">Calculate Profit</button>
+    <p id="tradeResult">Profit: -</p>
+  </div>
 
-        <div id="result" class="result"></div>
-    </div>
-
-    <div id="crypto-prices" class="crypto-prices"></div>
-
-    <div class="chart-container">
-        <canvas id="priceChart" width="400" height="200"></canvas>
-    </div>
-
-    <footer>
-        <p>Erstellt von deinem Namen - 2024</p>
-    </footer>
-
-    <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
