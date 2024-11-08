@@ -1,8 +1,10 @@
 const apiUrl = 'https://api.coingecko.com/api/v3/simple/price';
 const historyApiUrl = 'https://api.coingecko.com/api/v3/coins/';
+
+// Erweitertes Coin-Array
 const coins = [
   'bitcoin', 'ethereum', 'litecoin', 'solana', 'binancecoin', 
-  'cardano', 'dogecoin'
+  'cardano', 'dogecoin', 'polkadot', 'ripple', 'chainlink'
 ];
 
 let priceChart;
@@ -24,7 +26,6 @@ async function getCryptoPrices() {
         const price = coinData[currency];
         const change24h = coinData[`${currency}_24h_change`]?.toFixed(2) || "Keine Daten";
 
-        // Anzeigen der Preise
         cryptoContainer.innerHTML += `
           <div class="crypto-box" onclick="displayChart('${coin}')">
             <h3>${coin.charAt(0).toUpperCase() + coin.slice(1)}</h3>
@@ -50,7 +51,6 @@ async function displayChart(coin) {
     const labels = data.prices.map(price => new Date(price[0]).toLocaleDateString());
     const prices = data.prices.map(price => price[1]);
 
-    // Wenn ein Diagramm bereits existiert, es zerstören und ein neues erstellen
     if (priceChart) {
       priceChart.destroy();
     }
@@ -81,7 +81,7 @@ async function displayChart(coin) {
   }
 }
 
-// Funktion für den Währungsrechner
+// Währungsrechner-Funktion bleibt unverändert.
 async function calculateCrypto() {
   const crypto = document.getElementById('cryptoSelect').value;
   const amount = document.getElementById('amount').value;
@@ -100,6 +100,22 @@ async function calculateCrypto() {
   }
 }
 
-// Initiale Aufrufe und Aktualisierungsintervall
+// Gewinnrechner-Funktionen für Long- und Short-Trades bleiben unverändert
+function calculateLongTrade() {
+  const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+  const exitPrice = parseFloat(document.getElementById('exitPrice').value);
+  const positionSize = parseFloat(document.getElementById('positionSize').value);
+  const profit = (exitPrice - entryPrice) * positionSize;
+  document.getElementById('tradeResult').textContent = `Long Trade Gewinn: ${profit.toFixed(2)}`;
+}
+
+function calculateShortTrade() {
+  const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+  const exitPrice = parseFloat(document.getElementById('exitPrice').value);
+  const positionSize = parseFloat(document.getElementById('positionSize').value);
+  const profit = (entryPrice - exitPrice) * positionSize;
+  document.getElementById('tradeResult').textContent = `Short Trade Gewinn: ${profit.toFixed(2)}`;
+}
+
 getCryptoPrices();
 setInterval(getCryptoPrices, 60000); // Aktualisiert alle 60 Sekunden
