@@ -1,4 +1,4 @@
-/* Allgemeine Stile für den Body */
+/* Grundlegendes Styling für den Body */
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -6,28 +6,31 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #1e1e2f;
+  background-color: #181828;
   color: #e0e0e0;
+  overflow-x: hidden;
 }
 
-/* Header-Stile */
+/* Stil für den Header */
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   padding: 20px;
-  background-color: #24243e;
-  color: white;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
+  background: linear-gradient(90deg, #3a3a52, #24243e);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 header h1 {
   font-size: 24px;
   color: #f39c12;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  animation: fadeIn 1.2s ease-out;
 }
 
 header label, header select {
@@ -39,15 +42,16 @@ header label, header select {
 select {
   padding: 8px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   background-color: #333;
   color: #f39c12;
   font-size: 16px;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 select:hover {
   transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(243, 156, 18, 0.5);
 }
 
 /* Bereich für die Krypto-Preise */
@@ -56,32 +60,35 @@ select:hover {
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  padding: 20px;
-  margin-top: 10px;
-  width: 90%;
+  padding: 30px;
+  width: 100%;
+  max-width: 1200px;
 }
 
-/* Stil für jedes einzelne Krypto-Box-Element */
+/* Stil für jede Krypto-Box */
 .crypto-box {
-  background-color: #2d2d44;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  background-color: #2a2a44;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
   padding: 20px;
   width: 180px;
   text-align: center;
   cursor: pointer;
   transform: translateY(0);
   transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  position: relative;
+  overflow: hidden;
+  animation: slideIn 0.5s ease-out forwards;
 }
 
 .crypto-box:hover {
   background-color: #3e3e5e;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  transform: translateY(-10px) scale(1.05);
 }
 
 .crypto-box h3 {
-  font-size: 18px;
+  font-size: 20px;
   color: #f39c12;
   margin-bottom: 10px;
 }
@@ -92,22 +99,17 @@ select:hover {
   margin: 8px 0;
 }
 
-/* Stile für Statistiken, Krypto- und Handelsrechner */
+/* Stil für die Statistik-, Krypto- und Handelsrechner-Boxen */
 #crypto-stats, #crypto-calculator, #trade-calculator {
-  background-color: #2d2d44;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  background-color: #2a2a44;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   padding: 25px;
   margin-top: 20px;
   width: 90%;
   max-width: 600px;
   text-align: center;
-  transform: translateY(0);
-  transition: transform 0.2s ease-in-out;
-}
-
-#crypto-stats:hover, #crypto-calculator:hover, #trade-calculator:hover {
-  transform: scale(1.02);
+  animation: fadeInUp 0.7s ease-out forwards;
 }
 
 #crypto-stats h3, #crypto-calculator h3, #trade-calculator h3 {
@@ -128,26 +130,27 @@ button {
   color: white;
   border: none;
   padding: 12px 25px;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   margin-top: 20px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.4s ease, transform 0.3s ease;
 }
 
 button:hover {
   background: linear-gradient(90deg, #d35400, #f39c12);
-  transform: scale(1.05);
+  transform: scale(1.08);
+  box-shadow: 0 10px 20px rgba(211, 84, 0, 0.6);
 }
 
-/* Input-Stile */
+/* Eingabefelder */
 input[type="number"], select {
   padding: 10px;
   width: calc(100% - 20px);
   margin-top: 10px;
   border: 1px solid #444;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 16px;
   background-color: #333;
   color: #f39c12;
@@ -158,23 +161,39 @@ input[type="number"]::placeholder {
   color: #888;
 }
 
-/* Stil für das Chart-Canvas */
+/* Canvas-Stil */
 canvas {
   max-width: 90%;
   margin: 20px 0;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  background-color: #2d2d44;
+  background-color: #2a2a44;
   padding: 15px;
 }
 
-/* Responsive Design für kleinere Bildschirme */
+/* Animationen */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsives Design */
 @media (max-width: 768px) {
   header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   #crypto-prices {
     flex-direction: column;
     align-items: center;
@@ -183,7 +202,7 @@ canvas {
   .crypto-box {
     width: 90%;
   }
-  
+
   #crypto-stats, #crypto-calculator, #trade-calculator {
     width: 90%;
   }
